@@ -1,9 +1,11 @@
 #!/bin/bash
 
 # Check for required parameter (number of EC2 instances)
-if [ "$#" -ne 1 ]; then
-    echo "Usage: $0 <number_of_instances>"
-    exit 1
+if [ "$#" -eq 0 ]; then
+    echo "No number of instances provided. Using default value: 1"
+    NUM_INSTANCES=1
+else
+    NUM_INSTANCES=$2
 fi
 
 NUM_INSTANCES=$1

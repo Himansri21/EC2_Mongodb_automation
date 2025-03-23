@@ -1,0 +1,39 @@
+name: AWS resource creation
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      instance_count:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'Please give nmber of inputs '
+        # Default value if no value is explicitly provided
+        default: '1'
+        # Input has to be provided for the workflow to run
+        required: true  
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "greet"
+  deploy:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Runs a single command using the runners shell
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+        
+    - name: launching ec2 instance with aws 
+      run: 
+        chmod +x launch_ec2.sh
+        ./launch_ec2.sh ${{ github.event.inputs.instance_count }}
